@@ -35,14 +35,25 @@ function onLoadMore() {
   api.fetchImages().then(images => {
     appendArticlesMarkup(images);
     loadMoreBtn.enable();
+    
   });
+  scroll();
+  
 }
 function appendArticlesMarkup(images) {
   refs.galleryContainer.insertAdjacentHTML(
     'beforeend',
     galleryTemplate(images),
+
   );
 }
 function cleargalleryContainer() {
   refs.galleryContainer.innerHTML = '';
+}
+
+function scroll() {
+  window.scrollBy({
+    top: screen.height - 300, 
+    behavior: 'smooth'
+});
 }
