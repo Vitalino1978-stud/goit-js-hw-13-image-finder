@@ -1,7 +1,7 @@
 
-// import '../../css/styles.css';
+import './css/styles.css';
 import LoadMoreBtn from './load-next-page-btn';
-import API from './images-ap-service';
+import API from './images-api-service';
 import galleryTemplate from '../tempates/image-cards.hbs';
 const refs = {
   searchForm: document.querySelector('.search-form'),
@@ -17,7 +17,7 @@ refs.searchForm.addEventListener('submit', onSearch);
 
 function onSearch(e) {
   e.preventDefault();
-  api.query = e.currentTarget.elements.query.value;
+  api.query = e.currentTarget.elements.query.value.trim();
   loadMoreBtn.show();
   loadMoreBtn.disable();
   api.resetPage();
@@ -30,15 +30,17 @@ function onSearch(e) {
   
 }
 
-function onLoadMore() {
+async function onLoadMore() {
   loadMoreBtn.disable();
-  api.fetchImages().then(images => {
+  await api.fetchImages().then(images => {
     appendArticlesMarkup(images);
     loadMoreBtn.enable();
-    
   });
-  scroll();
-  
+
+  window.scrollBy({
+    top: screen.height - 400,
+    behavior: 'smooth',
+  });
 }
 function appendArticlesMarkup(images) {
   refs.galleryContainer.insertAdjacentHTML(
@@ -51,9 +53,3 @@ function cleargalleryContainer() {
   refs.galleryContainer.innerHTML = '';
 }
 
-function scroll() {
-  window.scrollBy({
-    top: screen.height - 300, 
-    behavior: 'smooth'
-});
-}
